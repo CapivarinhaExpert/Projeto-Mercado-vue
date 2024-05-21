@@ -1,53 +1,47 @@
 <template>
     <main>
-        <div id="box">
-
-            <div id="meuForm">
-                <label for="nome">Nome:</label>
-                <input type="text" id="nome" name="nome" v-model="nome" value="João">
-                <br>
-
-                <label for="">Valor:</label>
-                <input type="number" id="valor" v-model="valor" name="valor">
-                <br>
-
-                <label for="quantidade">Quantidade:</label>
-                <input type="number" id="quantidade" v-model="quantidade" name="quantidade">
-                <br>
-
-                <label for="categoria">Categoria:</label>
-                <select v-model="this.categoria" name="categoria" id="categoria">
-                    <option selected value="">Selecione uma opção</option>
-                    <InputCategoria  v-for="(atr, index) in this.categoriasData" :key="index" :nome_categoria="atr.nome_categoria" :cod_categoria="atr.cod_categoria"></InputCategoria>
-                </select>
-                <p>{{ categoria }}</p>
-
-                <p>{{ nome }}</p>
-                <br>
-                <button @click="inserirProduto()" type="button">Enviar</button>
-            </div>
-
-
-
-        </div>
+        
 
         <table id="box-produto">
             <thead>
                 <tr>
                     <th>Nome</th>
-                    <th>Código</th>
+                    <th>Valor</th>
                     <th>Quantidade</th>
                     <th>Categoria</th>
+                    <th>Código</th>
                 </tr>
             </thead>
+
+            <tbody v-show="adicionar" id="box-inputs">
+                <tr>
+                    <td><input type="text" id="nome" name="nome" v-model="nome"></td>
+                    <td><input type="number" id="valor" v-model="valor" name="valor"></td>
+                    <td><input type="number" id="quantidade" v-model="quantidade" name="quantidade"></td>
+                    <td>
+                        <select v-model="this.categoria" name="categoria" id="categoria">
+                            <option selected value="">Selecione</option>
+                            <InputCategoria v-for="(atr, index) in this.categoriasData" :key="index"
+                                :nome_categoria="atr.nome_categoria" :cod_categoria="atr.cod_categoria">
+                            </InputCategoria>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="4"><button id="btn-cadastrar" @click="inserirProduto()"  type="button">Cadastrar</button></td>
+                </tr>
+
+            </tbody>
             <tbody id="box-tbody">
                 <Produto v-for="(atr, index) in this.dados" :key="index" :Nome="atr.Nome" :cod_produto="atr.cod_produto"
-                    :Quantidade="atr.Quantidade" :nome_categoria="atr.nome_categoria"></Produto>
+                    :Quantidade="atr.Quantidade" :nome_categoria="atr.nome_categoria" :Valor="atr.Valor"></Produto>
 
 
             </tbody>
-
+            <img id="btn-adicionar" :src="srcAdicionar" @click="adicionarView" alt="Adicionar">
         </table>
+
 
     </main>
 
@@ -64,28 +58,35 @@ export default {
     data() {
         return {
             dados: [],
-            categoriasData:[],
+            categoriasData: [],
 
             nome: '',
             valor: '',
             quantidade: '',
             categoria: '',
 
+            adicionar: false,
+            srcAdicionar: 'http://localhost:8080/botao-adicionar.png'
         }
     },
     created() {
         this.getProdutos();
         this.getCategorias();
-        
+
     },
     components: {
         Produto,
         InputCategoria,
     },
     methods: {
-
+        adicionarView: function () {
+            this.adicionar = !this.adicionar
+            this.srcAdicionar = this.adicionar ? 'http://localhost:8080/botao-adicionar-cacelar.png' : 'http://localhost:8080/botao-adicionar.png';
+        }
+        ,
 
         async inserirProduto() {
+            this.adicionarView()
             $.ajax({
                 url: 'http://localhost/servidor_php/inserirProduto.php',
                 type: 'POST',
@@ -97,7 +98,7 @@ export default {
                 }
             });
         },
-         async getProdutos() {
+        async getProdutos() {
             fetch("http://localhost/servidor_php/index.php")
                 .then(response => response.json())
                 .then(data => {
@@ -194,6 +195,39 @@ tr:hover {
 #box-produto {
     width: 70%;
     padding: 20px 0;
+    position: relative;
 }
-</style>
 
+#btn-adicionar {
+    width: 30px;
+    position: absolute;
+    top: 0%;
+    left: calc(100% + 10px);
+    transition: all 0.5s;
+}
+
+#btn-adicionar:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+#box-inputs td {
+    padding: 0%;
+}
+
+#box-inputs input {
+    background-color: rgb(229, 229, 255);
+    width: 100%;
+    height: 30px;
+    border: #3b70e2 solid 2px;
+}
+
+#box-inputs select {
+    background-color: rgb(229, 229, 255);
+    width: 100%;
+    height: 30px;
+    border: #3b70e2 solid 2px;
+}
+
+#btn-cadastrar {}
+</style>
