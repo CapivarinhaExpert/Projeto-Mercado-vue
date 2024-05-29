@@ -174,22 +174,7 @@ tr:hover {
     background-color: #ddd;
 }
 
-#nav-bar {
-    width: 100%;
-    padding: 20px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: rgb(23, 111, 111);
-}
 
-#nav-list {
-    list-style-type: none;
-    display: flex;
-    gap: 10px;
-    color: white;
-
-}
 
 
 #box-produto {

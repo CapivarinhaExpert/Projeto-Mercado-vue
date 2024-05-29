@@ -1,7 +1,10 @@
 <template>
   <nav>
-    <router-link to="/produtos">Produtos</router-link>
-    <router-link to="/categorias">Categorias</router-link>
+    <router-link to="/painel">Painel de venda</router-link> |
+    <router-link to="/produtos">Produtos</router-link> |
+    <router-link to="/categorias">Categorias</router-link> |
+    <router-link to="/clientes">Clientes</router-link> |
+    <router-link to="/teste">teste</router-link>
   </nav>
   <router-view/>
 </template>
